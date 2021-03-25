@@ -4,42 +4,71 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CentralState with ChangeNotifier {
   List todoItems = <String>[];
   List categoryList = <String>[];
-  String cetegory = "general";
+  String currentCategory = "general";
 
   bool showAudioButton = true;
 
   CentralState() {
-    readData();
+    readCategories();
   }
 
   showButton(bool val) {
     showAudioButton = val;
     notifyListeners();
   }
-  //run readData();
+  //run readTodoList();
 
-  saveData() async {
+  saveTodoList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('$cetegory todo', todoItems);
+    prefs.setStringList('$currentCategory todo', todoItems);
   }
 
-  void readData() async {
+  saveCategories() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('categoryList', categoryList);
+  }
+
+  void readTodoList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     notifyListeners();
-    todoItems = prefs.getStringList('$cetegory todo') ?? <String>[];
+    todoItems = prefs.getStringList('$currentCategory todo') ?? <String>[];
     print(todoItems);
+  }
+
+  void readCategories() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    categoryList = prefs.getStringList('categoryList') ?? <String>[];
+    currentCategory = prefs.getString('currentCategory') ?? "general";
+    this.readTodoList();
+    notifyListeners();
+  }
+
+  void addCategory(newItem) {
+    notifyListeners();
+    categoryList.add(newItem);
+    this.changeCategory(newItem);
+    this.saveCategories();
+  }
+
+  void changeCategory(newItem) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('currentCategory', newItem);
+    currentCategory = newItem;
+    this.saveCategories();
+    this.readTodoList();
+    notifyListeners();
   }
 
   void addTodoItem(newItem) {
     notifyListeners();
     todoItems.add(newItem);
-    this.saveData();
+    this.saveTodoList();
   }
 
   void delete(item) {
     notifyListeners();
     todoItems.remove(item);
-    this.saveData();
+    this.saveTodoList();
   }
 
   /// Makes `Counter` readable inside the devtools by listing all of its properties

@@ -7,21 +7,26 @@ final Widget svg = SvgPicture.asset(assetName, semanticsLabel: 'Logo Button');
 class AudioButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(25),
-      height: 75,
-      width: 75,
-      child: svg,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(500),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey[400],
-            blurRadius: 4,
-            offset: Offset(4, 8), // Shadow position
-          ),
-        ],
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '/record-audio');
+      },
+      child: Container(
+        padding: EdgeInsets.all(25),
+        height: 75,
+        width: 75,
+        child: svg,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(500),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey[400],
+              blurRadius: 4,
+              offset: Offset(4, 8), // Shadow position
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "./Logo.dart";
-import "./Cetegory.dart";
+import "./CetegorySpecifier.dart";
 
 class NavBar extends StatelessWidget {
   @override
@@ -9,6 +9,6 @@ class NavBar extends StatelessWidget {
         margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [Logo(), Cetegory()]));
+            children: [Logo(), CetegorySpecifier()]));
   }
 }

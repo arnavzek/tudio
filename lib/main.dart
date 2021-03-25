@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import "./pages/Home.dart";
+import 'pages/CategoryScreen.dart';
+import "./pages/AudioInput.dart";
 import "./CentralState.dart";
 import 'package:provider/provider.dart';
 
@@ -10,8 +12,16 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-      ChangeNotifierProvider(create: (_) => CentralState()),
-    ], child: MaterialApp(home: Home()));
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => CentralState()),
+        ],
+        child: MaterialApp(
+          routes: {
+            '/': (context) => Home(),
+            '/categories': (context) => CategoryScreen(),
+            '/record-audio': (context) => AudioInput(),
+          },
+        ));
   }
 }
