@@ -8,6 +8,7 @@ class SpeechToTextConvertor {
     @required Function(String text) onResult,
     @required ValueChanged<bool> onListening,
   }) async {
+    print("init speechSynth");
     if (_speech.isListening) {
       _speech.stop();
       return true;

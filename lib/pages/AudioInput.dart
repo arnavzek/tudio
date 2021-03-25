@@ -17,7 +17,7 @@ class AudioInput extends StatefulWidget {
 
 class _AudioInputState extends State<AudioInput> {
   String text = '';
-  bool isListening = false;
+  bool isListening = true;
   Function submitter;
 
   void submitTodo() {
@@ -26,19 +26,14 @@ class _AudioInputState extends State<AudioInput> {
     Navigator.of(context).pop();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    toggleRecording();
-  }
-
   Future toggleRecording() => SpeechToTextConvertor.toggleRecording(
         onResult: (text) => setState(() => this.text = text),
         onListening: (isListening) {
+          print(isListening);
           setState(() => this.isListening = isListening);
 
           if (!isListening) {
-            Future.delayed(Duration(seconds: 2), () {
+            Future.delayed(Duration(seconds: 1), () {
               submitTodo();
             });
           }
@@ -46,8 +41,14 @@ class _AudioInputState extends State<AudioInput> {
       );
 
   @override
+  void initState() {
+    super.initState();
+    toggleRecording();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    submitter = context.watch<CentralState>().addTodoItem;
+    submitter = context.read<CentralState>().addTodoItem;
 
     return Scaffold(
       appBar: AppBar(
@@ -63,33 +64,35 @@ class _AudioInputState extends State<AudioInput> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         child: Stack(children: [
-          Padding(
-              padding: EdgeInsets.all(50),
-              child: Column(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: Text(
-                      "Listening...",
-                      style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 20.0,
-                        fontStyle: FontStyle.italic,
+          Center(
+              child: Padding(
+                  padding: EdgeInsets.all(50),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: Text(
+                          isListening == true ? "Listening..." : "",
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 20.0,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 50),
-                  Text(
-                    text,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40.0,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ],
-              )),
+                      SizedBox(height: 50),
+                      Text(
+                        text,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40.0,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ))),
           Positioned(left: 0, bottom: 0, child: RecordingBar(text))
         ]),
       ),
